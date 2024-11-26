@@ -4,8 +4,9 @@ from document import Documento
 from str2dic import Str2Dic 
 import os
 
+# Función para importar una colección desde un archivo CSV
 def import_collection(nombre_archivo):
-    coleccion = Coleccion("Personas")
+    coleccion = Coleccion("Personas") # Crear una nueva colección llamada 'Personas'
     with open(nombre_archivo, "r", encoding="utf-8") as file:
         schema = file.readline().strip()  # Leer el esquema
         str2dic = Str2Dic(schema)
@@ -34,25 +35,28 @@ def mostrar_menu():
     return None
 
 
-
+# Función principal que maneja la ejecución del programa
 def main():
-    db = Database()  
+    db = Database()  # Crear una instancia de la base de datos
 
     while True:
-        opcion = mostrar_menu()
-        if opcion is None:  
+        opcion = mostrar_menu() # Mostrar el menú y obtener la opción seleccionada
+        if opcion is None:   # Si la opción no es válida, continuar con el ciclo
             continue
-        
+
+       # Opción 1: Crear una nueva colección 
         if opcion == 1 :
             nombre_coleccion = input("Ingrese el nombre de la colección: ")
-            db.crear_coleccion(nombre_coleccion)  
+            db.crear_coleccion(nombre_coleccion)   # Crear la colección en la base de datos
             print(f"Colección '{nombre_coleccion}' creada.")
         
+        # Opción 2: Importar datos desde un archivo CSV
         elif opcion == 2  :
             nombre_coleccion = input("Ingrese el nombre de la colección: ")
-            coleccion = db.obtener_coleccion(nombre_coleccion)  
+            coleccion = db.obtener_coleccion(nombre_coleccion)    # Obtener la colección de la base de datos
             if coleccion:
                 ruta_csv = input("Ingrese la ruta del archivo CSV: ")
+                # Verificar si el archivo existe
                 if os.path.exists(ruta_csv):
                     coleccion.importar_csv(ruta_csv) 
                     print(f"Datos importados en la colección '{nombre_coleccion}'.")
@@ -61,23 +65,25 @@ def main():
             else:
                 print(f"Colección '{nombre_coleccion}' no encontrada.")
         
+        # Opción 3: Consultar un documento por su ID
         elif opcion == 3 :
             nombre_coleccion = input("Ingrese el nombre de la colección: ")
             coleccion = db.obtener_coleccion(nombre_coleccion) 
             if coleccion:
                 try:
                     doc_id = int(input("Ingrese el ID del documento: ")) 
-                    documento = coleccion.buscar_documento(doc_id)  
+                    documento = coleccion.buscar_documento(doc_id)  # Buscar el documento por su ID 
                     if documento:
-                        print("Documento encontrado:")
+                        print("Documento encontrado:") #si se encuentra el documento
                         print(documento)
                     else:
-                        print("Documento no encontrado.")
+                        print("Documento no encontrado.") #si no se encuentra
                 except ValueError:
                     print ("El ID debe ser un número.")
             else:
                 print(f"Colección '{nombre_coleccion}' no encontrada.")
         
+        # Opción 4: Eliminar un documento por su ID
         elif opcion == 4:
             nombre_coleccion = input("Ingrese el nombre de la colección: ")
             coleccion = db.obtener_coleccion(nombre_coleccion) 
@@ -91,6 +97,7 @@ def main():
             else:
                 print(f"Colección '{nombre_coleccion}' no encontrada.")
         
+        # Opción 5: Listar todos los documentos de la colección
         elif opcion == 5:
             nombre_coleccion = input("Ingrese el nombre de la colección: ")
             coleccion = db.obtener_coleccion(nombre_coleccion)
@@ -106,6 +113,7 @@ def main():
             else:
                 print(f"Colección '{nombre_coleccion}' no encontrada.")
         
+        # Opción 6: Salir del programa
         elif opcion == 6:
             print("Saliendo del programa.")
             break
